@@ -8,4 +8,6 @@ Record for reading Computer Systems A programmer's Perspective 3rd
 
 # 目录
 
-- [第一章](https://github.com/bluefalconjun/computersystems/blob/master/chapters/c1.md)
+- [1](https://github.com/bluefalconjun/computersystems/blob/master/chapters/c1.md)
+- [2](https://github.com/bluefalconjun/computersystems/blob/master/chapters/c2.md)
+- - [2.1](https://github.com/bluefalconjun/computersystems/blob/master/chapters/c2.1md)
