@@ -1,6 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unsafe"
+)
+
+/*
+all in C2.1
+*/
+func C2() {
+	c21()
+	c24()
+	c25()
+}
 
 /*
 练习题2.1 完成以下的数字转换
@@ -9,7 +21,9 @@ b. 二进制[1100100101111011]转换为十六进制
 c. 0xD5E4C转换为二进制
 d. 二进制[1001101110011110110101]转换为十六进制
 */
-func C2_1() {
+func c21() {
+	fmt.Println("c21")
+	defer fmt.Println("c21---done")
 	const hexa int = 0x39A7F8
 	fmt.Printf("dex:%x bin:%b\n", hexa, hexa)
 
@@ -52,18 +66,50 @@ show_pointer(pval);
 */
 type bytePointer = byte
 
-func show_bytes(start *bytePointer, len int) {
+func showbytes(start *bytePointer, len int) {
+
+	/*
+		注意: go语言中不支持指针的其他运算, 只有 &/* 这两种操作,
+		当前情况下, 需要将start地址向后移, 使用unsafe.Pointer获取地址,并使用uintptr来将地址转换为整数,后续的+1即将地址向后移动 one 字节.
+		如果需要按照c语言中的按类型大小移动. 使用:
+		unsafe.Pointer(uintptr(unsafe.Pointer(&p) + unsafe.Sizeof(p)))
+	*/
+	var curbyte *byte
 	for i := 0; i < len; i++ {
-		fmt.Printf("%.2x", start+i)
+
+		curbyte = (*byte)(unsafe.Pointer((uintptr(unsafe.Pointer(start)) + (uintptr)(i))))
+		fmt.Printf("%.2x", *curbyte)
 	}
 	fmt.Printf("\n")
 }
 
-func C2_4() {
-	const hexa int = 0x39A7F8
-	fmt.Printf("dex:%x bin:%b\n", hexa, hexa)
+/*
+考虑到同一接口,只是传入参数不同,这里应该使用Interface来实现.?
+*/
+func showint(i int) {
+	showbytes((*byte)(unsafe.Pointer(&i)), (int)(unsafe.Sizeof(i)))
+}
 
-	const binb string = "1100100101111011"
+func showfloat(i float32) {
+	showbytes((*byte)(unsafe.Pointer(&i)), (int)(unsafe.Sizeof(i)))
+}
+
+func showpointer(i uintptr) {
+	showbytes((*byte)(unsafe.Pointer(&i)), (int)(unsafe.Sizeof(i)))
+}
+
+func c24() {
+	fmt.Println("c24")
+	defer fmt.Println("c24---done")
+
+	const ival int = 12345
+	fval := float32(ival)
+	pval := uintptr(ival)
+
+	showint(ival)
+	showfloat(fval)
+	showpointer(pval)
+
 }
 
 /*
@@ -77,6 +123,18 @@ show_bytes(pval, 3);
 
 在大端和小端机器上,输出分别是什么?
 */
+func c25() {
+	fmt.Println("c25")
+	defer fmt.Println("c25---done")
+
+	var ival int
+	ival = 0x87654321
+	pval := (*byte)(unsafe.Pointer(&ival))
+
+	showbytes(pval, 1)
+	showbytes(pval, 2)
+	showbytes(pval, 3)
+}
 
 /*
 练习题2.7 下面对show_bytes的调用将输出什么结果
