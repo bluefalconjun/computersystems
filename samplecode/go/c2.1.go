@@ -70,7 +70,7 @@ func showbytes(start *bytePointer, len int) {
 
 	/*
 		注意: go语言中不支持指针的其他运算, 只有 &/* 这两种操作,
-		当前情况下, 需要将start地址向后移, 使用unsafe.Pointer获取地址,并使用uintptr来将地址转换为整数,后续的+1即将地址向后移动 one 字节.
+		当前情况下, 需要将start地址向后移, 使用unsafe.Pointer获取地址,并使用uintptr来将地址转换为整数,后续的+i即将地址向后移动 i 字节.
 		如果需要按照c语言中的按类型大小移动. 使用:
 		unsafe.Pointer(uintptr(unsafe.Pointer(&p) + unsafe.Sizeof(p)))
 	*/
